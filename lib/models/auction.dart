@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:perindo_bisnis_flutter/models/bid.dart';
 import 'package:perindo_bisnis_flutter/models/fish_sell.dart';
 import 'package:perindo_bisnis_flutter/models/store.dart';
@@ -28,6 +29,13 @@ class Auction {
     List bidJson = json['menawarlelang'] as List;
     List<Bid> bids = bidJson.map((bidJson) => Bid.fromJson(bidJson)).toList();
 
+    double? maxBidDouble = json['max_bidding'];
+    int maxBid = maxBidDouble?.floor() ?? 999999;
+
+    String lastBidText = json['last_bidding'];
+    double? lastBidDouble = double.tryParse(lastBidText);
+    int lastBid = lastBidDouble?.floor() ?? 0;
+
     int status = 0;
     if (json['proses'] == 1 || json['status'] == 1) status = 1;
     if (json['is_all_done'] == 1) status = 2;
@@ -40,8 +48,8 @@ class Auction {
       fishSells: fishSells,
       bids: bids,
       minBid: json['min_bidding'].floor(),
-      maxBid: json['max_bidding'].floor(),
-      lastBid: double.parse(json['last_bidding']).floor(),
+      maxBid: maxBid,
+      lastBid: lastBid,
       status: status,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
