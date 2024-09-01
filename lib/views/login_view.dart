@@ -134,7 +134,7 @@ class LoginView extends StackedView<LoginViewModel> {
     }
 
     // Get approval status. If status is 1, user is approved.
-    int approvalStatus = await viewModel.getApprovalStatus();
+    int approvalStatus = await viewModel.getBniApprovalStatus();
     viewModel.setUserApproved(approvalStatus > 0);
 
     // Go to PendingView is user is not approved yet, otherwise go to MainView.

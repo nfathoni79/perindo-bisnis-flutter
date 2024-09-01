@@ -71,13 +71,6 @@ class RegisterViewModel extends BaseViewModel {
       return e.toString();
     }
 
-    try {
-      await _userService.createPendingApproval();
-      setBusy(false);
-      return null;
-    } catch (e) {
-      setBusy(false);
-      return e.toString();
-    }
+    return null;
   }
 }

@@ -16,7 +16,9 @@ class MyUtils {
 
   /// Format number with thousand separators.
   static String formatNumber(dynamic number) {
-    return NumberFormat.decimalPattern('id_ID').format(number);
+    return number != null
+        ? NumberFormat.decimalPattern('id_ID').format(number)
+        : '?';
   }
 
   /// Format date and time.

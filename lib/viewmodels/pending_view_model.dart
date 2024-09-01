@@ -9,12 +9,20 @@ class PendingViewModel extends FutureViewModel<int> {
 
   @override
   Future<int> futureToRun() {
-    return getApprovalStatus();
+    return getApprovalStatusBni();
   }
 
   Future<int> getApprovalStatus() async {
     setBusy(true);
     int status = await _userService.getApprovalStatus();
+    setBusy(false);
+
+    return status;
+  }
+
+  Future<int> getApprovalStatusBni() async {
+    setBusy(true);
+    int status = await _userService.getBniApprovalStatus();
     setBusy(false);
 
     return status;

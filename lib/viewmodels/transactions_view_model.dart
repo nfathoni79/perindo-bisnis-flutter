@@ -1,32 +1,32 @@
 import 'package:perindo_bisnis_flutter/app/locator.dart';
-import 'package:perindo_bisnis_flutter/models/seaseed_user.dart';
-import 'package:perindo_bisnis_flutter/models/transaction.dart';
+import 'package:perindo_bisnis_flutter/models/bni_account.dart';
+import 'package:perindo_bisnis_flutter/models/bni_transfer.dart';
 import 'package:perindo_bisnis_flutter/services/user_service.dart';
 import 'package:stacked/stacked.dart';
 
 class TransactionsViewModel extends MultipleFutureViewModel {
-  static const String userKey = 'user';
-  static const String trxKey = 'transactions';
+  static const String bniAccKey = 'bniAcc';
+  static const String bniTrxKey = 'bniTrx';
 
   final _userService = locator<UserService>();
 
   @override
   Map<String, Future Function()> get futuresMap => {
-    userKey: getSeaseedUser,
-    trxKey: getTransactions,
+    bniAccKey: getBniAccount,
+    bniTrxKey: getBniTransfers,
   };
 
-  bool get userBusy => busy(userKey);
-  bool get trxBusy => busy(trxKey);
+  bool get bniAccBusy => busy(bniAccKey);
+  bool get bniTrxBusy => busy(bniTrxKey);
 
-  SeaseedUser get seaseedUser => dataMap?[userKey];
-  List<Transaction> get transactions => dataMap?[trxKey];
+  BniAccount get bniAccount => dataMap?[bniAccKey];
+  List<BniTransfer> get bniTransfers => dataMap?[bniTrxKey];
 
-  Future<SeaseedUser?> getSeaseedUser() {
-    return _userService.getCurrentSeaseedUser();
+  Future<BniAccount?> getBniAccount() {
+    return _userService.getCurrentBniAccount();
   }
 
-  Future<List<Transaction>> getTransactions() {
-    return _userService.getTransactions();
+  Future<List<BniTransfer>> getBniTransfers() {
+    return _userService.getBniTransfers();
   }
 }

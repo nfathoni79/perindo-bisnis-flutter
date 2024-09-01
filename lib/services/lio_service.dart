@@ -9,6 +9,8 @@ import 'package:perindo_bisnis_flutter/app/locator.dart';
 import 'package:perindo_bisnis_flutter/models/api_exception.dart';
 import 'package:perindo_bisnis_flutter/models/auction.dart';
 import 'package:perindo_bisnis_flutter/models/bank.dart';
+import 'package:perindo_bisnis_flutter/models/bni_account.dart';
+import 'package:perindo_bisnis_flutter/models/bni_transfer.dart';
 import 'package:perindo_bisnis_flutter/models/deposit.dart';
 import 'package:perindo_bisnis_flutter/models/seaseed_user.dart';
 import 'package:perindo_bisnis_flutter/models/store.dart';
@@ -674,6 +676,91 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to process cost.';
+    throw ApiException(message);
+  }
+
+  /// Get current user's BNI account.
+  Future<BniAccount> getBniAccount() async {
+    String? token = _prefsService.getAccessToken();
+    if (token == null) throw ApiException('Failed to get token.');
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/bni/accounts/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> body = jsonDecode(response.body);
+      return BniAccount.fromJson(body['account']);
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return getBniAccount();
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to get a BNI account.';
+    throw ApiException(message);
+  }
+
+  /// Get current user's BNI transfer list.
+  Future<List<BniTransfer>> getBniTransfers() async {
+    String? token = _prefsService.getAccessToken();
+    if (token == null) throw ApiException('Failed to get token.');
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/bni/transfers/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> body = jsonDecode(response.body);
+      List transfers = body['transfers'];
+
+      return transfers.map((trf) => BniTransfer.fromJson(trf)).toList();
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return getBniTransfers();
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to get transactions.';
+    throw ApiException(message);
+  }
+
+  /// Get BNI approval status.
+  Future<int> getBniApprovalStatus() async {
+    String? token = _prefsService.getAccessToken();
+    if (token == null) throw ApiException('Failed to get token.');
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/user/v2/users/current/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> body = jsonDecode(response.body);
+      User user = User.fromJson(body['user']);
+
+      return user.bniNum != '' ? 1 : 0;
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return getBniApprovalStatus();
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to get status.';
     throw ApiException(message);
   }
 }
