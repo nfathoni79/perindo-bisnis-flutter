@@ -50,7 +50,7 @@ class PendingView extends StackedView<PendingViewModel> {
 
   void _onPressedCheckStatus(
       BuildContext context, PendingViewModel viewModel) async {
-    int status = await viewModel.getApprovalStatus();
+    int status = await viewModel.getApprovalStatusBni();
     viewModel.data = status;
 
     if (context.mounted && status > 0) {

@@ -1,5 +1,7 @@
 import 'package:perindo_bisnis_flutter/app/locator.dart';
 import 'package:perindo_bisnis_flutter/models/bank.dart';
+import 'package:perindo_bisnis_flutter/models/bni_account.dart';
+import 'package:perindo_bisnis_flutter/models/bni_transfer.dart';
 import 'package:perindo_bisnis_flutter/models/deposit.dart';
 import 'package:perindo_bisnis_flutter/models/seaseed_user.dart';
 import 'package:perindo_bisnis_flutter/models/transaction.dart';
@@ -16,16 +18,16 @@ class UserService {
   List<SeaseedUser> _otherSeaseedUsers = [];
   List<Bank> _banks = [];
   List<Transaction> _transactions = [];
+  BniAccount? _currentBniAccount;
+  List<BniTransfer> _bniTransfers = [];
 
   User? get currentUser => _currentUser;
-
   SeaseedUser? get currentSeaseedUser => _currentSeaseedUser;
-
   List<SeaseedUser> get otherSeaseedUsers => _otherSeaseedUsers;
-
   List<Bank> get banks => _banks;
-
   List<Transaction> get transactions => _transactions;
+  BniAccount? get currentBniAccount => _currentBniAccount;
+  List<BniTransfer> get bniTransfers => _bniTransfers;
 
   Future<UserToken> login(String username, String password) async {
     return _lio.getToken(username, password);
@@ -94,5 +96,19 @@ class UserService {
 
   Future<bool> processCost() async {
     return _lio.processCost();
+  }
+
+  Future<BniAccount?> getCurrentBniAccount() async {
+    _currentBniAccount = await _lio.getBniAccount();
+    return _currentBniAccount;
+  }
+
+  Future<List<BniTransfer>> getBniTransfers() async {
+    _bniTransfers = await _lio.getBniTransfers();
+    return _bniTransfers;
+  }
+
+  Future<int> getBniApprovalStatus() async {
+    return _lio.getBniApprovalStatus();
   }
 }

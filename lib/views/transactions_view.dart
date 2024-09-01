@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:perindo_bisnis_flutter/viewmodels/transactions_view_model.dart';
-import 'package:perindo_bisnis_flutter/views/widgets/transaction_card.dart';
+import 'package:perindo_bisnis_flutter/views/widgets/bni_transfer_card.dart';
 import 'package:stacked/stacked.dart';
 
 class TransactionsView extends StackedView<TransactionsViewModel> {
@@ -40,20 +40,24 @@ class TransactionsView extends StackedView<TransactionsViewModel> {
 
   Widget _buildTransactionsSection(
       BuildContext context, TransactionsViewModel viewModel) {
-    if (viewModel.trxBusy || viewModel.userBusy) {
+    if (viewModel.bniTrxBusy || viewModel.bniAccBusy) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (viewModel.transactions.isEmpty) {
+    if (viewModel.hasErrorForKey(TransactionsViewModel.bniTrxKey)) {
+      return Text(viewModel.error(TransactionsViewModel.bniTrxKey).toString());
+    }
+
+    if (viewModel.bniTransfers.isEmpty) {
       return const Text('Belum ada transaksi');
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: viewModel.transactions
-          .map((trx) => TransactionCard(
-                transaction: trx,
-                currentUser: viewModel.seaseedUser,
+      children: viewModel.bniTransfers
+          .map((trx) => BniTransferCard(
+                transfer: trx,
+                currentAccount: viewModel.bniAccount,
               ))
           .toList(),
     );

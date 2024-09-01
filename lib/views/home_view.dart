@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:perindo_bisnis_flutter/utils/my_utils.dart';
 import 'package:perindo_bisnis_flutter/viewmodels/home_view_model.dart';
 import 'package:perindo_bisnis_flutter/views/auction_detail_view.dart';
-import 'package:perindo_bisnis_flutter/views/deposit_view.dart';
 import 'package:perindo_bisnis_flutter/views/profile_view.dart';
 import 'package:perindo_bisnis_flutter/views/transactions_view.dart';
-import 'package:perindo_bisnis_flutter/views/transfer_view.dart';
 import 'package:perindo_bisnis_flutter/views/widgets/auction_card.dart';
 import 'package:perindo_bisnis_flutter/views/widgets/menu_button.dart';
-import 'package:perindo_bisnis_flutter/views/withdrawal_view.dart';
 import 'package:stacked/stacked.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
@@ -73,42 +70,45 @@ class HomeView extends StackedView<HomeViewModel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Saldo Wallet',
+              'Saldo BNI',
             ),
-            viewModel.seaseedBusy
+            viewModel.bniBusy
                 ? const CircularProgressIndicator()
                 : Text(
-                    '${MyUtils.formatNumber(viewModel.seaseed?.balance)} IDR',
+                    '${MyUtils.formatNumber(viewModel.bni?.lastBalance)} IDR',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
                   ),
+            viewModel.hasErrorForKey(HomeViewModel.bniKey)
+                ? Text(viewModel.error(HomeViewModel.bniKey).toString())
+                : const SizedBox.shrink(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                MenuButton(
-                  iconData: Icons.add_circle_outline,
-                  label: 'Setor',
-                  color: Colors.blue.shade900,
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => const DepositView(),
-                  )),
-                ),
+                // MenuButton(
+                //   iconData: Icons.add_circle_outline,
+                //   label: 'Setor',
+                //   color: Colors.blue.shade900,
+                //   onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                //     builder: (_) => const DepositView(),
+                //   )),
+                // ),
                 MenuButton(
                   iconData: Icons.arrow_circle_right_outlined,
                   label: 'Kirim',
                   color: Colors.grey.shade500,
                   onTap: null,
                 ),
-                MenuButton(
-                  iconData: Icons.arrow_circle_down_outlined,
-                  label: 'Tarik',
-                  color: Colors.blue.shade900,
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => const WithdrawalView(),
-                  )),
-                ),
+                // MenuButton(
+                //   iconData: Icons.arrow_circle_down_outlined,
+                //   label: 'Tarik',
+                //   color: Colors.blue.shade900,
+                //   onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                //     builder: (_) => const WithdrawalView(),
+                //   )),
+                // ),
                 MenuButton(
                   iconData: Icons.history,
                   label: 'Riwayat',

@@ -28,10 +28,10 @@ class LoginViewModel extends BaseViewModel {
     }
   }
 
-  /// Get current user approval status value.
-  /// 0: Pending, 1: Approved, -1: Declined.
-  Future<int> getApprovalStatus() async {
-    return await _userService.getApprovalStatus();
+  /// Get current user approval status based on BNI number.
+  /// 0: Pending, 1: Approved.
+  Future<int> getBniApprovalStatus() async {
+    return await _userService.getBniApprovalStatus();
   }
 
   /// Set user is approved or not to prefs.

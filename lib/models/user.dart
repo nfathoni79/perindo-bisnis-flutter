@@ -8,6 +8,7 @@ class User {
     required this.phone,
     required this.fullName,
     this.group = 'Pemindang',
+    this.bniNum = '',
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -22,6 +23,7 @@ class User {
       group: groups.isNotEmpty
           ? MyUtils.capitalize(groups[0]['name'])
           : 'Pemindang',
+      bniNum: json['bninum'],
     );
   }
 
@@ -31,4 +33,5 @@ class User {
   final String phone;
   final String fullName;
   final String group;
+  final String bniNum;
 }
